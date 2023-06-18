@@ -1,13 +1,15 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Layout from './components/layout';
+import Activities from './components/activities';
+import Weather from './components/weather';
 
-function App() {
+const App = () => {
   return (
-    <h1 className="text-3xl font-bold underline">
-      Hello Activity Scheduler!
-    </h1>
-  );
-}
+  <Layout>
+    <Activities/>
+    <Weather/>
+  </Layout>
+  )
+};
 
 export default App;
