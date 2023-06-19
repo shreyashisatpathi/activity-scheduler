@@ -7,18 +7,39 @@ import ActivityModal from './components/modals/activityModal';
 
 const App = () => {
   const [activities, setActivities] = useState<ActivityType[]>([]);
-
-  const getActivities =(formData: ActivityType ) => {
+  const [editableActivity, setEditableActivity] = useState<ActivityType>();
+  const getActivities = (formData: ActivityType) => {
     setActivities([...activities, formData as ActivityType]);
-  }
+  };
 
+  const handleEditActivities = (id: string) => {
+    const activity = activities.find((activity) => activity.id === id);
+    setEditableActivity(activity);
+  };
+  console.log('editableActivity in app', editableActivity);
+
+  const handleDeleteActvity = (id: string) => {
+    const updatedActivities = activities.filter(
+      (activity) => activity.id !== id
+    );
+    setActivities(updatedActivities);
+  };
+
+  console.log('activities', activities);
   return (
-  <Layout>
-    <Activities activities={activities}/>
-    <Weather/>
-    <ActivityModal getActivities={getActivities}/>
-  </Layout>
-  )
+    <Layout>
+      <Activities
+        activities={activities}
+        handleDelete={handleDeleteActvity}
+        handleEdit={handleEditActivities}
+      />
+      <Weather />
+      <ActivityModal
+        getActivities={getActivities}
+        editableActivity={editableActivity}
+      />
+    </Layout>
+  );
 };
 
 export default App;

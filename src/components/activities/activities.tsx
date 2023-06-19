@@ -3,13 +3,15 @@ import React, { FC } from 'react';
 import Activity from './activity';
 import AddActivity from './AddActivity';
 import { ActivityType } from '../../type';
-
+//import { activities as mockActivity } from '../../mock/data';
 type Props = {
   activities: ActivityType[];
+  handleDelete: (id: string) => void
+  handleEdit: (id: string) => void
 };
 
-const Activities: FC<Props> = ({ activities }) => {
-  console.log(activities);
+const Activities: FC<Props> = ({ activities, handleDelete, handleEdit }) => {
+   
   if (activities.length === 0) {
     return (
       <div className="max-w-lg shadow-lg p-6">
@@ -23,7 +25,7 @@ const Activities: FC<Props> = ({ activities }) => {
     <div className="basis-2/3 h-calc(100vh-3.75rem) p-4 max-w-lg">
       <AddActivity />
       {activities.map((activity, index) => {
-        return <Activity key={index} {...activity} />;
+        return <Activity key={index} {...activity} handleDelete={handleDelete} handleEdit={handleEdit}/>;
       })}
     </div>
   );

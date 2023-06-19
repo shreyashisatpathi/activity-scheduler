@@ -3,4 +3,5 @@ export type ActivityType = {
     dateTime: Date;
     pitch: string;
     user: string;
+    id: string;
   };

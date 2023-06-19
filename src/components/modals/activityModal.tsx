@@ -3,19 +3,16 @@ import { FC, useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import useActivityModal from '../../hooks/useActivityModal';
 import { activityTypes, pitches, users } from '../../mock/data';
+import type { ActivityType } from '../../type';
+import { nanoid } from 'nanoid'
 
-type ActivityType = {
-  activityType: string;
-  dateTime: Date;
-  pitch: string;
-  user: string;
-};
 
 type Props = {
-  getActivities: (data: ActivityType) => void
+  getActivities?: (data: ActivityType) => void
+  editableActivity?: ActivityType
 }
 
-const ActivityModal :FC<Props>= ({getActivities}) => {
+const ActivityModal :FC<Props>= ({getActivities, editableActivity}) => {
   const { isOpen, closeModal } = useActivityModal();
   const [activities, setActivities] = useState<ActivityType[]>([]);
 
@@ -28,12 +25,14 @@ const ActivityModal :FC<Props>= ({getActivities}) => {
     reset,
   } = useForm<FieldValues>({
     defaultValues: {
-      activityType: '',
+      activityType: editableActivity?.activityType,
       dateTime: '',
       user: '',
       pitch: '',
     },
   });
+
+  // setValue('activityType', editableActivity?.activityType)
 
   const activityType = watch('activityType');
   const dateTime = watch('dateTime');
@@ -54,7 +53,7 @@ const ActivityModal :FC<Props>= ({getActivities}) => {
       </>
     );
   };
-
+  
   let bodyContent = (
     <div className="flex flex-col gap-2">
       <p className="font-semibold">Choose one of the Activity Type</p>
@@ -84,7 +83,9 @@ const ActivityModal :FC<Props>= ({getActivities}) => {
   );
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    getActivities(data as ActivityType)
+    if(getActivities){
+      getActivities({...data as ActivityType, id: nanoid(5)})
+    }
     closeModal()
   };
 
