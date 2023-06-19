@@ -1,13 +1,10 @@
 import useActivityModal from '../../hooks/useActivityModal';
+import Button from '../Button/Button';
 
 const AddActivity = () => {
   const { openModal } = useActivityModal();
 
-  return (
-    <button className="bg-sky-500/100 rounded" onClick={openModal}>
-      Add Activity
-    </button>
-  );
+  return <Button label={'Add Activity'} onClick={openModal} outline />;
 };
 
 export default AddActivity;

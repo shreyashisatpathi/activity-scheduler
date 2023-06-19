@@ -1,5 +1,5 @@
 import Modal from './modal';
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import useActivityModal from '../../hooks/useActivityModal';
 import { activityTypes, pitches, users } from '../../mock/data';
@@ -11,7 +11,11 @@ type ActivityType = {
   user: string;
 };
 
-const ActivityModal = () => {
+type Props = {
+  getActivities: (data: ActivityType) => void
+}
+
+const ActivityModal :FC<Props>= ({getActivities}) => {
   const { isOpen, closeModal } = useActivityModal();
   const [activities, setActivities] = useState<ActivityType[]>([]);
 
@@ -69,7 +73,7 @@ const ActivityModal = () => {
       <p className="font-semibold pt-2">Select an User</p>
       <select {...register('user', { required: true })}>
         {users.map((user) => {
-          return <option value="Tom">{user.name}</option>
+          return <option value={user.name}>{user.name}</option>
         })}
       </select>
       <p className="font-semibold pt-2">Select a Pitch for this Activity</p>
@@ -80,8 +84,8 @@ const ActivityModal = () => {
   );
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    setActivities([...activities, data as ActivityType]);
-    console.log('Submitted form value', activities);
+    getActivities(data as ActivityType)
+    closeModal()
   };
 
   return (
