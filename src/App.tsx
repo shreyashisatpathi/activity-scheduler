@@ -33,7 +33,7 @@ const App = () => {
         handleDelete={handleDeleteActvity}
         handleEdit={handleEditActivities}
       />
-      <Weather />
+      <Weather temp={0} rain={false} />
       <ActivityModal
         getActivities={getActivities}
         editableActivity={editableActivity}
