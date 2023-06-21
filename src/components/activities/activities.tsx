@@ -21,6 +21,7 @@ const Activities: FC<Props> = ({ activities, handleDelete, handleEdit }) => {
       </div>
     );
   }
+  
   return (
     <div className="basis-2/3 h-calc(100vh-3.75rem) p-4 max-w-lg">
       <AddActivity />

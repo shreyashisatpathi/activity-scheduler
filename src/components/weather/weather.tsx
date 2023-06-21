@@ -54,7 +54,7 @@ const Weather: FC<Props> = ({ temp, rain }) => {
   return (
     <div className="basis-1/3 bg-blue-200 h-calc(100vh-3.75rem) p-4 mt-2 max-w-lg rounded overflow-hidden shadow-lg">
       <div className="container mx-auto">
-        <h1 className="text-3xl font-semibold mb-4">Weather Forcast</h1>
+        <h1 className="text-3xl font-semibold mb-4">Weather Forecast</h1>
 
         <form onSubmit={handleSubmit} className="mb-4">
           <input
