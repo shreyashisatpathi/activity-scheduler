@@ -12,31 +12,38 @@ const App = () => {
     setActivities([...activities, formData as ActivityType]);
   };
 
-  const handleEditActivities = (id: string) => {
-    const activity = activities.find((activity) => activity.id === id);
-    setEditableActivity(activity);
+  const handleEditActivity = (id: string) => {
+    const selectedActivity = activities.find((activity) => activity.id === id);
+    setEditableActivity(selectedActivity);
   };
-  console.log('editableActivity in app', editableActivity);
-
   const handleDeleteActvity = (id: string) => {
-    const updatedActivities = activities.filter(
+    const remaningActivities = activities.filter(
       (activity) => activity.id !== id
     );
-    setActivities(updatedActivities);
+    setActivities(remaningActivities);
   };
 
-  console.log('activities', activities);
+  const handleUpdateActivity = (updatedActivity: ActivityType) => {
+    activities[
+      activities.findIndex((activity) => activity.id === updatedActivity.id)
+    ] = updatedActivity;
+    setActivities(activities);
+    setEditableActivity(undefined);
+  };
   return (
     <Layout>
       <Activities
         activities={activities}
         handleDelete={handleDeleteActvity}
-        handleEdit={handleEditActivities}
+        handleEdit={handleEditActivity}
       />
       <Weather temp={0} rain={false} />
       <ActivityModal
         getActivities={getActivities}
         editableActivity={editableActivity}
+        resetForm={!!editableActivity}
+        updateActivity={handleUpdateActivity}
+        isEditMode={!!editableActivity}
       />
     </Layout>
   );

@@ -1,5 +1,5 @@
 import Modal from './modal';
-import { FC, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import useActivityModal from '../../hooks/useActivityModal';
 import { activityTypes, pitches, users } from '../../mock/data';
@@ -7,13 +7,22 @@ import type { ActivityType } from '../../type';
 import { nanoid } from 'nanoid';
 
 type Props = {
-  getActivities?: (data: ActivityType) => void;
+  getActivities: (data: ActivityType) => void;
   editableActivity?: ActivityType;
+  resetForm?: boolean;
+  updateActivity: (data: ActivityType) => void;
+  isEditMode: boolean;
 };
 
-const ActivityModal: FC<Props> = ({ getActivities, editableActivity }) => {
+const ActivityModal: FC<Props> = ({
+  getActivities,
+  editableActivity,
+  resetForm,
+  updateActivity,
+  isEditMode,
+}) => {
   const { isOpen, closeModal } = useActivityModal();
-  const [activities, setActivities] = useState<ActivityType[]>([]);
+  const [isEditing, setIsEditing] = useState<Boolean>(false);
 
   const {
     register,
@@ -23,22 +32,38 @@ const ActivityModal: FC<Props> = ({ getActivities, editableActivity }) => {
     formState: { errors },
     reset,
   } = useForm({
-    defaultValues: {
-      activityType: editableActivity?.activityType,
-      dateTime: '',
-      user: '',
-      pitch: '',
-    },
+    defaultValues: useMemo(() => {
+      console.log('usememo defalut value');
+      return {
+        activityType: '',
+        dateTime: new Date(),
+        user: '',
+        pitch: '',
+      };
+    }, [editableActivity]),
   });
 
-  // setValue('activityType', editableActivity?.activityType)
+  const setEditMode = () => {
+    setIsEditing(true);
+  };
+
+  const resetActivity = () => {
+    const { activityType, dateTime, user, pitch } = editableActivity || {};
+    reset({ activityType, dateTime, user, pitch });
+  };
+
+  useEffect(() => {
+    if (resetForm) {
+      resetActivity();
+    }
+  }, [editableActivity]);
 
   const activityType = watch('activityType');
   const dateTime = watch('dateTime');
   const user = watch('user');
   const pitch = watch('pitch');
 
-  const radio = (value: string, registerField: 'activityType' | 'pitch') => {
+  const getRadio = (value: string, registerField: 'activityType' | 'pitch') => {
     return (
       <>
         <label className="inline-block">
@@ -60,7 +85,7 @@ const ActivityModal: FC<Props> = ({ getActivities, editableActivity }) => {
       <p className="font-semibold">Choose one of the Activity Type</p>
       <div className="grid grid-cols-2 md:grid-col-2 sm:grid-cols-3 gap-3 max-h-[50vh] overflow-y-auto ">
         {activityTypes.map((activity) => {
-          return radio(activity.label, 'activityType');
+          return getRadio(activity.label, 'activityType');
         })}
       </div>
       <small className="text-red-600">
@@ -82,13 +107,14 @@ const ActivityModal: FC<Props> = ({ getActivities, editableActivity }) => {
         {users.map((user) => {
           return <option value={user.name}>{user.name}</option>;
         })}
+        defaultValue={editableActivity?.user}
       </select>
       <small className="text-red-600">
         {errors?.user && errors.user.message}
       </small>
       <p className="font-semibold pt-2">Select a Pitch for this Activity</p>
       {pitches.map((pitch) => {
-        return radio(pitch.label, 'pitch');
+        return getRadio(pitch.label, 'pitch');
       })}
       <small className="text-red-600">
         {errors?.pitch && errors.pitch.message}
@@ -97,9 +123,14 @@ const ActivityModal: FC<Props> = ({ getActivities, editableActivity }) => {
   );
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    if (getActivities) {
+    const itemId = editableActivity?.id as string;
+    const editedActivity = { ...(data as ActivityType), id: itemId };
+    if (isEditMode) {
+      updateActivity(editedActivity);
+    } else {
       getActivities({ ...(data as ActivityType), id: nanoid(5) });
     }
+
     closeModal();
   };
 
