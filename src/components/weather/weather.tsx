@@ -13,13 +13,14 @@ type Props = {
   rain: boolean;
 };
 
-const Weather: React.FC<Props> = ({ temp, rain }) => {
-  const [location, setLocation] = React.useState<string>('');
-  const [weatherData, setWeatherData] = React.useState<WeatherData | null>(
+const Weather: FC<Props> = ({ temp, rain }) => {
+
+  const [location, setLocation] = useState<string>('');
+  const [weatherData, setWeatherData] = useState<WeatherData | null>(
     null
   );
-  const [loading, setLoading] = React.useState<boolean>(false);
-  const [error, setError] = React.useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
   const fetchWeatherData = async () => {
     setLoading(true);
@@ -41,9 +42,6 @@ const Weather: React.FC<Props> = ({ temp, rain }) => {
     setLoading(false);
   };
 
-  console.log('rain', rain);
-  console.log('temp', temp);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (location.trim() === '') {
@@ -52,6 +50,7 @@ const Weather: React.FC<Props> = ({ temp, rain }) => {
     }
     fetchWeatherData();
   };
+
   return (
     <div className="basis-1/3 bg-blue-200 h-calc(100vh-3.75rem) p-4 mt-2 max-w-lg rounded overflow-hidden shadow-lg">
       <div className="container mx-auto">
