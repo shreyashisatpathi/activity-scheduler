@@ -14,9 +14,9 @@ const Activities: FC<Props> = ({ activities, handleDelete, handleEdit }) => {
    
   if (activities.length === 0) {
     return (
-      <div className="max-w-lg shadow-lg p-6">
+      <div className="basis-1/2 shadow-lg p-6">
         <h3>You Haven't scheduled any activity yet</h3>
-        <p>Please click the button</p>
+        <p className="pb-8">Please click the button</p>
         <AddActivity />
       </div>
     );
