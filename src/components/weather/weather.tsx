@@ -1,6 +1,5 @@
 import React, { FC, useState } from 'react';
 import axios from 'axios';
-const API_KEY = '6e8c3764ba08fed00822d9c7ba7db712';
 
 type WeatherData = {
   temp: number;
@@ -18,7 +17,8 @@ const Weather: FC<Props> = ({ temp, rain }) => {
   const [location, setLocation] = useState<string>('');
   const [weatherData, setWeatherData] = useState<WeatherData | null>(
     null
-  );
+  )
+  
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
@@ -27,7 +27,7 @@ const Weather: FC<Props> = ({ temp, rain }) => {
     setError('');
     try {
       const response = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${API_KEY}`
+        `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${process.env.REACT_APP_WEATHER_API_KEY}`
       );
       const { main, weather } = response.data;
 

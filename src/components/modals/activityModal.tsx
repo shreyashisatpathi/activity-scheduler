@@ -22,18 +22,14 @@ const ActivityModal: FC<Props> = ({
   isEditMode,
 }) => {
   const { isOpen, closeModal } = useActivityModal();
-  const [isEditing, setIsEditing] = useState<Boolean>(false);
 
   const {
     register,
     handleSubmit,
-    setValue,
-    watch,
     formState: { errors },
     reset,
   } = useForm({
     defaultValues: useMemo(() => {
-      console.log('usememo defalut value');
       return {
         activityType: '',
         dateTime: new Date(),
@@ -43,9 +39,6 @@ const ActivityModal: FC<Props> = ({
     }, [editableActivity]),
   });
 
-  const setEditMode = () => {
-    setIsEditing(true);
-  };
 
   const resetActivity = () => {
     const { activityType, dateTime, user, pitch } = editableActivity || {};
@@ -58,10 +51,6 @@ const ActivityModal: FC<Props> = ({
     }
   }, [editableActivity]);
 
-  const activityType = watch('activityType');
-  const dateTime = watch('dateTime');
-  const user = watch('user');
-  const pitch = watch('pitch');
 
   const getRadio = (value: string, registerField: 'activityType' | 'pitch') => {
     return (
@@ -125,6 +114,8 @@ const ActivityModal: FC<Props> = ({
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     const itemId = editableActivity?.id as string;
     const editedActivity = { ...(data as ActivityType), id: itemId };
+    
+    //If modal opened in edit mode then onsubmit will update an activity else will create
     if (isEditMode) {
       updateActivity(editedActivity);
     } else {
