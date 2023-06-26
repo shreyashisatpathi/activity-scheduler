@@ -5,6 +5,10 @@ In the project directory, you can run:
 ### `pnpm install`
 ### `pnpm start`
 
+# Add API Key
+## Re-name env.example file to .env and add your open-whather api key
+
+
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
